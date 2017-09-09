@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>canvas画布保存成图片</title>
+	<style type="text/css">
+		* {
+			padding:0; margin:0;
+		}
+		#box {
+			width:500px; height:500px; border:1px solid #000; margin:100px auto;
+		}
+		#canvasId {
+			position: absolute; top:100px; left:50%; transform: translateX(-50%); z-index:500;
+		}
+	</style>
+</head>
+<body>
+	<div id="box"></div>
+	<canvas id="canvasId" width="500" height="500"></canvas>
+	<input type="button" value="生成图片" onclick="saveImageInfo()" />
+	<input type="button" value="生成图片下载" onclick="saveAsLocalImage()" />
+</body>
+<!-- <script type="text/javascript" src="jq.js"></script> -->
+<script type="text/javascript">
+
+        function saveImageInfo (){  
+            var mycanvas = document.getElementById("canvasId");  
+            var image    = mycanvas.toDataURL("image/jpg");  
+            var w=window.open('about:blank','image from canvas');  
+            w.document.write("<img src='"+image+"' alt='from canvas'/>");  
+        }  
+           function saveAsLocalImage () {  
+                var myCanvas = document.getElementById("canvasId");  
+                // here is the most important part because if you dont replace you will get a DOM 18 exception.  
+                // var image = myCanvas.toDataURL("image/png").replace("image/png", "image/octet-stream;Content-Disposition: attachment;filename=foobar.png");  
+                var image = myCanvas.toDataURL("image/png").replace("image/png", "image/octet-stream");   
+                window.location.href=image; // it will save locally  
+            }  
+
+		var canvass = document.getElementById('canvasId');
+			var can = canvass.getContext('2d');
+			can.strokeStyle='red';
+			can.lineWidth = 4;
+			var m_down = false;
+			can.clearRect(0,0,500,500);
+			can.beginPath();		
+			
+			canvass.onmousedown = function(e){ mouseD(e)}
+			canvass.onmousemove = function(e){ mouseM(e)}
+			canvass.onmouseup = function(e){ mouseU(e)}
+			canvass.onmouseout = function(e){ mouseUu(e)}
+			//移动
+			canvass.addEventListener('touchstart',mouseD,false);
+			canvass.addEventListener('touchmove',mouseM,false);
+			canvass.addEventListener('touchend',mouseU,false);
+			
+			function mouseD(e){
+
+					
+					var down_x = event.offsetX,
+					down_y = event.offsetY;
+					can.strokeStyle='red';
+					can.lineWidth = 4;
+					can.moveTo(down_x,down_y);
+				m_down = true;
+
+			}
+			
+			function mouseU(e){
+				m_down = false;
+
+			}
+			function mouseUu(e){
+				m_down = false;
+
+			}
+
+			function mouseM(e){
+
+					var move_x = event.offsetX,
+					move_y = event.offsetY ;
+					//笔
+				if(m_down){
+					
+					can.lineTo(move_x,move_y)
+					can.stroke();
+					
+					// console.log(move_x,move_y);
+				}
+				
+			}
+
+</script>
+</html>
